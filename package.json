@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.27.1",
+    "@clerk/themes": "^1.7.9",
     "next": "14.0.2",
     "react": "^18",
     "react-dom": "^18",
