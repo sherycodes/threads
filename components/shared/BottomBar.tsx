@@ -12,26 +12,28 @@ export default function Page() {
         {sidebarLinks.map((link) => {
           const isActive =
             link.route === pathname ||
-            (pathname.includes(link.route) && link.route.length > 0);
+            (pathname.includes(link.route) && link.route.length > 1);
           return (
-            <Link
-              href={link.route}
-              key={link.label}
-              className={`flex flex-col gap-2  items-center justify-center rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5 ${
-                isActive && 'bg-primary-500'
-              }`}
-            >
-              <Image
-                src={link.imgURL}
-                alt={link.label}
-                width={16}
-                height={16}
-                className='object-contain'
-              />
-              <p className='text-light-1 text-sm font-medium max-sm:hidden'>
-                {link.label.split(/\s+/)[0]}
-              </p>
-            </Link>
+            <div className='group'>
+              <Link
+                href={link.route}
+                key={link.label}
+                className={`flex flex-col gap-2  items-center justify-center rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5 ${
+                  isActive && 'bg-primary-500'
+                } group-hover:bg-primary-500`}
+              >
+                <Image
+                  src={link.imgURL}
+                  alt={link.label}
+                  width={16}
+                  height={16}
+                  className='object-contain'
+                />
+                <p className='text-light-1 text-sm font-medium max-sm:hidden'>
+                  {link.label.split(/\s+/)[0]}
+                </p>
+              </Link>
+            </div>
           );
         })}
       </ul>
