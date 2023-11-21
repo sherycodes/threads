@@ -69,3 +69,68 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     throw new Error(`Error fetching posts: ${error.message}`);
   }
 }
+
+export async function getThreadById(id: string) {
+  try {
+    await connectDB();
+    const post = await Thread.findById(id)
+      .populate({
+        path: 'author',
+        model: User,
+        select: '_id id name image',
+      })
+      .populate({
+        path: 'children',
+        populate: [
+          { path: 'author', model: User, select: '_id id name image parentId' },
+          {
+            path: 'children',
+            model: Thread,
+            populate: {
+              path: 'author',
+              model: User,
+              select: '_id id parentId name image',
+            },
+          },
+        ],
+      })
+      .exec();
+    return post;
+  } catch (error: any) {
+    throw new Error(`Error getting post: ${error.message}`);
+  }
+}
+
+interface AddCommentParams {
+  threadId: string;
+  content: string;
+  author: string;
+  path: string;
+}
+
+export async function addCommentToThread({
+  threadId,
+  content,
+  author,
+  path,
+}: AddCommentParams) {
+  try {
+    await connectDB();
+    const originalThread = await Thread.findById(threadId);
+    if (!originalThread) {
+      throw new Error('Error fetching original thread');
+    }
+    const commentThread = new Thread({
+      content,
+      author,
+      parentId: originalThread._id,
+    });
+    const savedComment = await commentThread.save();
+
+    originalThread.children.push(savedComment._id);
+    await originalThread.save();
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Error adding comment: ${error.message}`);
+  }
+}
