@@ -2,6 +2,7 @@
 import { revalidatePath } from 'next/cache';
 import User from '../models/user.model';
 import connectDB from '../mongoose';
+import Thread from '../models/thread.model';
 
 interface UserParams {
   userId: string;
@@ -48,5 +49,29 @@ export async function fetchUser(userId: string) {
     return user;
   } catch (error: any) {
     throw new Error(`Error fetching user: ${error.message}`);
+  }
+}
+
+export async function fetchUserPosts(userId: string) {
+  try {
+    await connectDB();
+    const result = await User.findById(userId).populate({
+      path: 'threads',
+      model: Thread,
+      populate: [
+        {
+          path: 'children',
+          model: Thread,
+          populate: {
+            path: 'author',
+            model: User,
+            select: 'id name image',
+          },
+        },
+      ],
+    });
+    return result;
+  } catch (error: any) {
+    throw new Error(`Error fetching posts: ${error.message}`);
   }
 }

@@ -3,12 +3,13 @@ import React from 'react';
 import { sidebarLinks } from '@/constants';
 import Image from 'next/image';
 import Link from 'next/link';
-import { SignOutButton, SignedIn } from '@clerk/nextjs';
+import { SignOutButton, SignedIn, useAuth } from '@clerk/nextjs';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function Page() {
   const router = useRouter();
   const pathname = usePathname();
+  const { userId } = useAuth();
   return (
     <section className='bg-dark-2 sticky left-0 top-0 z-20 w-fit h-screen flex flex-col justify-between max-md:hidden border-r border-r-dark-4 pt-28 pb-5 overflow-auto custom-scrollbar'>
       <ul className='flex flex-col gap-6 w-full px-6 flex-1'>
@@ -19,7 +20,9 @@ export default function Page() {
           return (
             <div className='group'>
               <Link
-                href={link.route}
+                href={`${
+                  link.label === 'Profile' ? `/profile/${userId}` : link.route
+                }`}
                 key={link.label}
                 className={`flex justify-start gap-4 p-4 rounded-lg ${
                   isActive && 'bg-primary-500'

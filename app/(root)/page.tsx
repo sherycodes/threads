@@ -3,7 +3,6 @@ import ThreadCard from '@/components/cards/ThreadCard';
 
 export default async function Page() {
   const { posts } = await fetchPosts(1, 30);
-  console.log(posts);
   return (
     <>
       <h1 className='font-bold text-[30px] text-light-1 max-md:text-[25px]'>
