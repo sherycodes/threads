@@ -1,5 +1,4 @@
 'use server';
-import { revalidatePath } from 'next/cache';
 import Community from '../models/community.model';
 import Thread from '../models/thread.model';
 import User from '../models/user.model';
@@ -10,8 +9,8 @@ export async function createCommunity(
   id: string,
   name: string,
   username: string,
-  bio: string,
   image: string,
+  bio: string,
   createdById: string
 ) {
   try {
@@ -31,6 +30,7 @@ export async function createCommunity(
     const createdCommunity = await community.save();
     user.communities.push(createdCommunity._id);
     await user.save();
+    console.log('Created Community', createdCommunity);
     return createdCommunity;
   } catch (error: any) {
     throw new Error(`Error creating community: ${error.message}`);
