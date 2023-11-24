@@ -1,6 +1,7 @@
 import { fetchUserPosts } from '@/lib/actions/user.actions';
 import ThreadCard from '@/components/cards/ThreadCard';
 import { redirect } from 'next/navigation';
+import { fetchCommunityPosts } from '@/lib/actions/community.actions';
 
 interface ThreadTabsProps {
   currentUserId: string;
@@ -8,12 +9,46 @@ interface ThreadTabsProps {
   accountType: string;
 }
 
+interface Result {
+  id: string;
+  name: string;
+  image: string;
+  threads: {
+    _id: string;
+    content: string;
+    parentId: string | null;
+    createdAt: string;
+    community: {
+      id: string;
+      name: string;
+      image: string;
+    } | null;
+    author: {
+      id: string;
+      name: string;
+      image: string;
+    };
+    children: {
+      author: {
+        id: string;
+        name: string;
+        image: string;
+      };
+    }[];
+  }[];
+}
+
 export default async function Page({
   currentUserId,
   accountId,
   accountType,
 }: ThreadTabsProps) {
-  const result = await fetchUserPosts(accountId);
+  let result: Result;
+  if (accountType === 'User') {
+    result = await fetchUserPosts(accountId);
+  } else {
+    result = await fetchCommunityPosts(accountId);
+  }
   if (!result) redirect('/');
   return (
     <div className='flex flex-col gap-10 mt-9'>

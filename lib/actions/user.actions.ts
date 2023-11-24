@@ -4,6 +4,7 @@ import { FilterQuery, SortOrder } from 'mongoose';
 import User from '../models/user.model';
 import connectDB from '../mongoose';
 import Thread from '../models/thread.model';
+import Community from '../models/community.model';
 
 interface UserParams {
   userId: string;
@@ -46,7 +47,10 @@ export async function updateUser({
 export async function fetchUser(userId: string) {
   try {
     connectDB();
-    const user = await User.findOne({ id: userId });
+    const user = await User.findOne({ id: userId }).populate({
+      path: 'communities',
+      model: Community,
+    });
     return user;
   } catch (error: any) {
     throw new Error(`Error fetching user: ${error.message}`);
@@ -60,6 +64,7 @@ export async function fetchUserPosts(userId: string) {
       path: 'threads',
       model: Thread,
       populate: [
+        { path: 'community', model: Community, select: '_id id name image' },
         {
           path: 'children',
           model: Thread,

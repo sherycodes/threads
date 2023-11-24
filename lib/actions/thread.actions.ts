@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import Thread from '../models/thread.model';
 import User from '../models/user.model';
 import connectDB from '../mongoose';
+import Community from '../models/community.model';
 
 interface CreateThreadParams {
   content: string;
@@ -19,14 +20,24 @@ export async function createThread({
 }: CreateThreadParams) {
   try {
     await connectDB();
+    const communityIdObject = await Community.findOne(
+      { id: communityId },
+      { _id: 1 }
+    );
     const createdThread = await Thread.create({
       content,
       author,
-      community: communityId,
+      community: communityIdObject,
     });
 
     if (createdThread) {
       await User.findByIdAndUpdate(author, {
+        $push: { threads: createdThread._id },
+      });
+    }
+
+    if (communityIdObject) {
+      await Community.findByIdAndUpdate(communityIdObject, {
         $push: { threads: createdThread._id },
       });
     }
@@ -48,7 +59,11 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
       .skip(skipAmount)
       .limit(pageSize)
       .populate({ path: 'author', model: User })
-      // .populate({path: 'community', model: Community})
+      .populate({
+        path: 'community',
+        model: Community,
+        select: 'name image id',
+      })
       .populate({
         path: 'children',
         populate: {
@@ -83,6 +98,7 @@ export async function getThreadById(id: string) {
         path: 'children',
         populate: [
           { path: 'author', model: User, select: '_id id name image parentId' },
+          { path: 'community', model: Community, select: '_id id name image' },
           {
             path: 'children',
             model: Thread,

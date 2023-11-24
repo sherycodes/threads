@@ -79,6 +79,11 @@ export async function fetchCommunityPosts(id: string) {
       model: Thread,
       populate: [
         {
+          path: 'community',
+          model: Community,
+          select: 'name image id',
+        },
+        {
           path: 'author',
           model: User,
           select: 'name image id', // Select the "name" and "_id" fields from the "User" model
@@ -121,13 +126,13 @@ export async function fetchCommunities({
     const skipAmount = (pageNumber - 1) * pageSize;
 
     // Create a case-insensitive regular expression for the provided search string.
-    const regex = new RegExp(searchString, 'i');
 
     // Create an initial query object to filter communities.
     const query: FilterQuery<typeof Community> = {};
 
     // If the search string is not empty, add the $or operator to match either username or name fields.
-    if (searchString.trim() !== '') {
+    if (searchString && searchString.trim() !== '') {
+      const regex = new RegExp(searchString, 'i');
       query.$or = [
         { username: { $regex: regex } },
         { name: { $regex: regex } },

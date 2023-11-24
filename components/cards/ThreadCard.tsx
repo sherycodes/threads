@@ -10,7 +10,7 @@ interface ThreadCardProps {
     image: string;
     name: string;
   };
-  community: string | null;
+  community: { id: string; name: string; image: string } | null;
   comments: any[];
   parentId: string;
   createdAt: Date;
@@ -27,6 +27,7 @@ const ThreadCard = ({
   createdAt,
   isComment,
 }: ThreadCardProps) => {
+  console.log(community);
   return (
     <article
       className={`w-full rounded-xl ${
@@ -123,16 +124,23 @@ const ThreadCard = ({
           </Link>
         </div>
       )}
-
       {!isComment && community && (
         <Link
-          href={`/communities/${id}`}
-          className='mt-5 flex items-center gap-4'
+          href={`/communities/${community.id}`}
+          className='mt-5 flex items-center gap-2'
         >
           <p className='text-gray-1 text-[12px] font-medium'>
-            {formatDateString(createdAt.toString())}
+            {formatDateString(createdAt.toString())} - {community.name}{' '}
+            Community
           </p>
-          {/* <Image src=/> */}
+          <div className='relative w-4 h-4'>
+            <Image
+              src={community.image}
+              alt={community.name}
+              fill
+              className='rounded-full object-cover'
+            />
+          </div>
         </Link>
       )}
     </article>
