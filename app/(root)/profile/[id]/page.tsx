@@ -1,11 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { fetchUser } from '@/lib/actions/user.actions';
+import { fetchUser, getUserReplies } from '@/lib/actions/user.actions';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import { profileTabs } from '@/constants';
 import Image from 'next/image';
 import ProfileHeader from '@/components/shared/ProfileHeader';
 import ThreadTabs from '@/components/shared/ThreadTabs';
+import ThreadCard from '@/components/cards/ThreadCard';
 
 export default async function Page({ params }: { params: { id: string } }) {
   if (!params.id) return null;
@@ -13,6 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   if (!user) return null;
   const userInfo = await fetchUser(params.id);
   if (!userInfo.onboarded) redirect('/onboarding');
+  const replies = await getUserReplies(userInfo._id);
   return (
     <section>
       <ProfileHeader
@@ -44,15 +46,35 @@ export default async function Page({ params }: { params: { id: string } }) {
             </TabsTrigger>
           ))}
         </TabsList>
-        {profileTabs.map((tab) => (
-          <TabsContent value={tab.value} key={tab.value} className='w-full'>
-            <ThreadTabs
-              currentUserId={user.id}
-              accountId={userInfo._id}
-              accountType='User'
-            />
-          </TabsContent>
-        ))}
+
+        <TabsContent value='threads'>
+          <ThreadTabs
+            currentUserId={user.id}
+            accountId={userInfo._id}
+            accountType='User'
+          />
+        </TabsContent>
+        <TabsContent value='replies'>
+          {replies.length === 0 ? (
+            <p className='text-gray-1 text-base font-medium w-full'>No replies found</p>
+          ) : (
+            <div className='flex flex-col gap-10 mt-9'>
+              {replies.map((reply) => (
+                <ThreadCard
+                  key={reply._id}
+                  id={reply._id}
+                  content={reply.content}
+                  author={reply.author}
+                  community={reply.community}
+                  isComment={true}
+                  comments={reply.children}
+                  createdAt={reply.createdAt}
+                  parentId={reply.parentId}
+                />
+              ))}
+            </div>
+          )}
+        </TabsContent>
       </Tabs>
     </section>
   );

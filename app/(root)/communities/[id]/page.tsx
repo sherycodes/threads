@@ -20,10 +20,9 @@ export default async function Page({ params }: { params: { id: string } }) {
         image={community.image}
         name={community.name}
         username={community.username}
-        bio={community.bio}
         type='Community'
       />
-      <div className='my-10 bg-neutral-800 w-full h-0.5'></div>
+      <div className='my-8 bg-neutral-800 w-full h-0.5'></div>
       <Tabs defaultValue='threads' className='w-full'>
         <TabsList className='tab'>
           {communityTabs.map((tab) => (
@@ -44,29 +43,32 @@ export default async function Page({ params }: { params: { id: string } }) {
             </TabsTrigger>
           ))}
         </TabsList>
-        {communityTabs.map((tab) => (
-          <TabsContent value={tab.value} key={tab.value} className='w-full'>
-            {tab.value === 'members' ? (
-              <div className='mt-9 flex flex-col gap-10'>
-                {community.members.map((member: any) => (
-                  <UserCard
-                    key={member.id}
-                    id={member.id}
-                    name={member.name}
-                    username={member.username}
-                    image={member.image}
-                  />
-                ))}
-              </div>
-            ) : (
-              <ThreadTabs
-                currentUserId={user.id}
-                accountId={community._id}
-                accountType='Community'
-              />
-            )}
-          </TabsContent>
-        ))}
+        <TabsContent value='threads'>
+          <ThreadTabs
+            currentUserId={user.id}
+            accountId={community._id}
+            accountType='Community'
+          />
+        </TabsContent>
+        <TabsContent value='members'>
+          {community.members.length === 0 ? (
+            <p className='text-gray-1 text-base font-medium w-full'>
+              No members found
+            </p>
+          ) : (
+            <div className='flex flex-col gap-10 mt-9'>
+              {community.members.map((member: any) => (
+                <UserCard
+                  key={member.id}
+                  id={member.id}
+                  name={member.name}
+                  username={member.username}
+                  image={member.image}
+                />
+              ))}
+            </div>
+          )}
+        </TabsContent>
       </Tabs>
     </section>
   );

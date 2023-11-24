@@ -95,10 +95,14 @@ export async function getThreadById(id: string) {
         select: '_id id name image',
       })
       .populate({
+        path: 'community',
+        model: Community,
+        select: '_id id name image',
+      })
+      .populate({
         path: 'children',
         populate: [
           { path: 'author', model: User, select: '_id id name image parentId' },
-          { path: 'community', model: Community, select: '_id id name image' },
           {
             path: 'children',
             model: Thread,

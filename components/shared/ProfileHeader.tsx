@@ -5,7 +5,7 @@ interface ProfileHeaderProps {
   image: string;
   name: string;
   username: string;
-  bio: string;
+  bio?: string;
   accountId: string;
   authUserId: string;
   type?: string;

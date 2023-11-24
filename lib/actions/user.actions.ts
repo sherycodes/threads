@@ -144,3 +144,16 @@ export async function getActivity(userId: string) {
     throw new Error(`Error fetching activity: ${error.message}`);
   }
 }
+
+export async function getUserReplies(userId: string) {
+  try {
+    await connectDB();
+    const replies = await Thread.find({
+      author: userId,
+      parentId: { $exists: true, $ne: null },
+    }).populate({ path: 'author', model: User, select: 'name image id' });
+    return replies;
+  } catch (error: any) {
+    throw new Error(`Error getting replies: ${error.message}`);
+  }
+}
