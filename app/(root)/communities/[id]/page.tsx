@@ -11,7 +11,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   if (!params.id) return null;
   const user = await currentUser();
   if (!user) return null;
-  console.log(user);
   const community = await fetchCommunityDetails(params.id);
   return (
     <section>

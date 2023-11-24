@@ -54,7 +54,6 @@ export default function AccountProfile({
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof UserValidation>) {
     const blob = values.image;
-    console.log('Blob: ', blob);
     const hasImageChanged = isBase64Image(blob);
     if (hasImageChanged) {
       const imageRes = await startUpload(files);

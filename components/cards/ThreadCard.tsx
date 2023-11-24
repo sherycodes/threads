@@ -27,7 +27,6 @@ const ThreadCard = ({
   createdAt,
   isComment,
 }: ThreadCardProps) => {
-  console.log(community);
   return (
     <article
       className={`w-full rounded-xl ${

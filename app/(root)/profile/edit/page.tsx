@@ -1,6 +1,7 @@
 import { currentUser } from '@clerk/nextjs';
 import { fetchUser } from '@/lib/actions/user.actions';
 import AccountProfile from '@/components/forms/AccountProfile';
+import Image from 'next/image';
 
 export default async function Page() {
   const user = await currentUser();
@@ -17,16 +18,23 @@ export default async function Page() {
     image: userInfo ? userInfo.image : user.imageUrl,
   };
   return (
-    <main className='w-full max-w-3xl mx-auto flex flex-col py-20 px-10 justify-start'>
-      <h3 className='font-bold text-[26px] lg:text-[30px] text-light-1'>
-        Onboarding
-      </h3>
-      <p className='text-light-1 text-base'>
-        Complete your profile now to use Threads
-      </p>
+    <>
+      <div className='flex gap-3 w-full items-center'>
+        <Image
+          src='/assets/edit.svg'
+          alt='Edit'
+          width={25}
+          height={25}
+          className='object-contain'
+        />
+        <h3 className='font-bold text-[30px] text-light-1 max-md:text-[25px]'>
+          Edit Profile
+        </h3>
+      </div>
+
       <section className='mt-9 bg-dark-2 p-10 rounded-lg'>
-        <AccountProfile user={userData} btnTitle='Continue' />
+        <AccountProfile user={userData} btnTitle='Edit' />
       </section>
-    </main>
+    </>
   );
 }

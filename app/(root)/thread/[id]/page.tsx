@@ -12,7 +12,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   const userInfo = await fetchUser(user.id);
   if (!userInfo.onboarded) redirect('/onboarding');
   const thread = await getThreadById(params.id);
-  console.log('Thread:', thread);
   return (
     <section className='relative'>
       <div className='mb-10'>
