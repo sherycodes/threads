@@ -11,7 +11,6 @@ interface CommunityCardProps {
   name: string;
   username: string;
   image: string;
-  bio: string;
   members: Member[];
 }
 
@@ -20,11 +19,10 @@ export default function Page({
   image,
   name,
   username,
-  bio,
   members,
 }: CommunityCardProps) {
   return (
-    <div className='bg-dark-3 flex flex-col gap-4 justify-start px-4 py-5 rounded-lg sm:w-96'>
+    <div className='bg-dark-3 flex flex-col gap-8 justify-start px-4 py-5 rounded-lg sm:w-96'>
       <div className='flex flex-wrap items-center gap-4'>
         <Link href={`/communities/${id}`} className='relative w-12 h-12'>
           <Image
@@ -41,7 +39,6 @@ export default function Page({
           <p className='text-gray-1 text-sm font-medium'>@{username}</p>
         </div>
       </div>
-      <p className='text-base text-gray-1 font-medium'>{bio}</p>
       <div className='flex justify-between items-center w-full flex-wrap gap-3'>
         <Link href={`/communities/${id}`}>
           <Button className='bg-primary-500 min-w-[74px] h-auto text-light-1 font-medium rounded-lg hover:bg-primary-500'>
