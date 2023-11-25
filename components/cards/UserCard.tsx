@@ -24,7 +24,7 @@ export default function Page({
     if (isCommunity) {
       router.push(`/communities/${id}`);
     } else {
-      router.push(`/users/${id}`);
+      router.push(`/profile/${id}`);
     }
     return;
   };
