@@ -26,8 +26,8 @@ export default async function Page() {
           <div className='flex flex-col gap-8 w-[350px]'>
             {suggestedCommunities.communities.map((item) => (
               <UserCard
-                key={item._id}
-                id={item._id}
+                key={item.id}
+                id={item.id}
                 name={item.name}
                 username={item.username}
                 image={item.image}
@@ -47,8 +47,8 @@ export default async function Page() {
           <div className='flex flex-col gap-8 w-[350px]'>
             {suggestedUsers.users.map((item) => (
               <UserCard
-                key={item._id}
-                id={item._id}
+                key={item.id}
+                id={item.id}
                 name={item.name}
                 username={item.username}
                 image={item.image}
