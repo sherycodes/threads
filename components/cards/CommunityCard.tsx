@@ -22,7 +22,7 @@ export default function Page({
   members,
 }: CommunityCardProps) {
   return (
-    <div className='bg-dark-3 flex flex-col gap-8 justify-start px-4 py-5 rounded-lg sm:w-96'>
+    <div className='bg-dark-3 flex flex-col gap-8 justify-start px-4 py-5 rounded-lg sm:w-[360px]'>
       <div className='flex flex-wrap items-center gap-4'>
         <Link href={`/communities/${id}`} className='relative w-12 h-12'>
           <Image

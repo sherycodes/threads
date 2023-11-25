@@ -4,6 +4,7 @@ import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import CommunityCard from '@/components/cards/CommunityCard';
 import SearchBar from '@/components/shared/SearchBar';
+import Pagination from '@/components/shared/Pagination';
 
 export default async function Page({
   searchParams,
@@ -14,10 +15,10 @@ export default async function Page({
   if (!user) return null;
   const userInfo = await fetchUser(user.id);
   if (!userInfo.onboarded) redirect('/onboarding');
-  const { communities } = await fetchCommunities({
+  const { communities, isNext } = await fetchCommunities({
     searchString: searchParams.q,
     pageNumber: searchParams?.page ? +searchParams.page : 1,
-    pageSize: 25,
+    pageSize: 20,
   });
   return (
     <section className='w-full'>
@@ -43,6 +44,11 @@ export default async function Page({
           ))
         )}
       </div>
+      <Pagination
+        isNext={isNext}
+        path='communities'
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+      />
     </section>
   );
 }
