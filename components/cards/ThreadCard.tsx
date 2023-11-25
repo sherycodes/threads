@@ -1,6 +1,7 @@
 import { formatDateString } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
+import DeleteThread from './DeleteThread';
 
 interface ThreadCardProps {
   id: string;
@@ -14,6 +15,7 @@ interface ThreadCardProps {
   comments: any[];
   parentId: string;
   createdAt: Date;
+  currentUserId: string;
   isComment?: boolean;
 }
 
@@ -25,6 +27,7 @@ const ThreadCard = ({
   comments,
   parentId,
   createdAt,
+  currentUserId,
   isComment,
 }: ThreadCardProps) => {
   return (
@@ -96,6 +99,13 @@ const ThreadCard = ({
             </div>
           </div>
         </div>
+        <DeleteThread
+          currentUserId={currentUserId}
+          authorId={author.id}
+          threadId={JSON.stringify(id)}
+          parentId={parentId}
+          isComment={isComment}
+        />
       </div>
 
       {!isComment && comments.length > 0 && (

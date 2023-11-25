@@ -67,6 +67,7 @@ export default async function Page({
                 }
           }
           comments={thread.children}
+          currentUserId={currentUserId}
           parentId={thread.parentId}
           createdAt={thread.createdAt}
           community={thread.community}

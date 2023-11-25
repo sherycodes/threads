@@ -56,13 +56,16 @@ export default async function Page({ params }: { params: { id: string } }) {
         </TabsContent>
         <TabsContent value='replies'>
           {replies.length === 0 ? (
-            <p className='text-gray-1 text-base font-medium w-full'>No replies found</p>
+            <p className='text-gray-1 text-base font-medium w-full'>
+              No replies found
+            </p>
           ) : (
             <div className='flex flex-col gap-10 mt-9'>
               {replies.map((reply) => (
                 <ThreadCard
                   key={reply._id}
                   id={reply._id}
+                  currentUserId={user.id}
                   content={reply.content}
                   author={reply.author}
                   community={reply.community}

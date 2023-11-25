@@ -17,6 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <div className='mb-10'>
         <ThreadCard
           id={thread.id}
+          currentUserId={user.id}
           content={thread.content}
           author={thread.author}
           community={thread.community}
@@ -39,6 +40,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <ThreadCard
             key={item._id}
             id={item._id}
+            currentUserId={user.id}
             author={item.author}
             content={item.content}
             community={item.community}

@@ -26,6 +26,7 @@ export default async function Page() {
               content={post.content}
               author={post.author}
               comments={post.children}
+              currentUserId={user.id}
               parentId={post.parentId}
               createdAt={post.createdAt}
               community={post.community}
