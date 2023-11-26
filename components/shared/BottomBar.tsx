@@ -1,4 +1,5 @@
 'use client';
+import { useAuth } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
 import { sidebarLinks } from '@/constants';
 import Image from 'next/image';
@@ -6,6 +7,7 @@ import Link from 'next/link';
 
 export default function Page() {
   const pathname = usePathname();
+  const { userId } = useAuth();
   return (
     <section className='bg-glassmorphism fixed bottom-0 z-20 w-full backdrop-blur-lg md:hidden p-4 xs:px-7 rounded-t-lg'>
       <ul className='flex items-center justify-between gap-3 xs:gap-5'>
@@ -16,7 +18,9 @@ export default function Page() {
           return (
             <div className='group'>
               <Link
-                href={link.route}
+                href={`${
+                  link.label === 'Profile' ? `/profile/${userId}` : link.route
+                }`}
                 key={link.label}
                 className={`flex flex-col gap-2  items-center justify-center rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5 ${
                   isActive && 'bg-primary-500'
