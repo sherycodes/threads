@@ -9,7 +9,7 @@ This project is a clone of the popular social media platform Threads, built usin
 - Profile customization and community management
 
 ## Technologies
-- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+- **Frontend**: Next.js, TypeScript, Tailwind CSS
 - **Backend**: MongoDB
 - **Authentication**: Clerk
 
